@@ -1,0 +1,51 @@
+--> npm install --no-audit @privy-io/react-auth @privy-io/wagmi
+npm error code ERESOLVE
+npm error ERESOLVE could not resolve
+npm error
+npm error While resolving: phantom-pro-clone@0.0.0
+npm error Found: ox@0.9.6
+npm error node_modules/ox
+npm error   ox@"^0.9.6" from porto@0.2.35
+npm error   node_modules/porto
+npm error     porto@"0.2.35" from @wagmi/connectors@6.2.0
+npm error     node_modules/@wagmi/connectors
+npm error       @wagmi/connectors@"6.2.0" from wagmi@2.19.5
+npm error       node_modules/wagmi
+npm error         peerOptional wagmi@">=2.0.0" from porto@0.2.35
+npm error         1 more (the root project)
+npm error   ox@"0.9.6" from viem@2.40.3
+npm error   node_modules/viem
+npm error     viem@"^2.31.7" from @base-org/account@2.4.0
+npm error     node_modules/@base-org/account
+npm error       @base-org/account@"2.4.0" from @wagmi/connectors@6.2.0
+npm error       node_modules/@wagmi/connectors
+npm error         @wagmi/connectors@"6.2.0" from wagmi@2.19.5
+npm error         node_modules/wagmi
+npm error     viem@"^2.21.26" from @coinbase/cdp-sdk@1.38.6
+npm error     node_modules/@coinbase/cdp-sdk
+npm error       @coinbase/cdp-sdk@"^1.0.0" from @base-org/account@2.4.0
+npm error       node_modules/@base-org/account
+npm error         @base-org/account@"2.4.0" from @wagmi/connectors@6.2.0
+npm error         node_modules/@wagmi/connectors
+npm error     12 more (@coinbase/wallet-sdk, @gemini-wallet/core, ...)
+npm error
+npm error Could not resolve dependency:
+npm error @privy-io/react-auth@"*" from the root project
+npm error
+npm error Conflicting peer dependency: ox@0.8.9
+npm error node_modules/ox
+npm error   peerOptional ox@"^0.8.0" from permissionless@0.2.57
+npm error   node_modules/permissionless
+npm error     peerOptional permissionless@"^0.2.47" from @privy-io/react-auth@3.8.0
+npm error     node_modules/@privy-io/react-auth
+npm error       @privy-io/react-auth@"*" from the root project
+npm error
+npm error Fix the upstream dependency conflict, or retry
+npm error this command with --force or --legacy-peer-deps
+npm error to accept an incorrect (and potentially broken) dependency resolution.
+npm error
+npm error
+npm error For a full report see:
+npm error /home/runner/.npm/_logs/2025-11-28T09_25_12_055Z-eresolve-report.txt
+npm error A complete log of this run can be found in: /home/runner/.npm/_logs/2025-11-28T09_25_12_055Z-debug-0.log
+exit status 1

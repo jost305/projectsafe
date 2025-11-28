@@ -1,0 +1,7 @@
+{
+  "name": "Phantom Pro Clone",
+  "description": "A high-fidelity, OLED-themed crypto wallet featuring a Pro Terminal, social identity, and advanced NFT burn interactions.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
