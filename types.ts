@@ -98,6 +98,70 @@ export interface TrackedWallet {
   topTokens: string[];
   chain: 'SOL' | 'ETH';
   recentActivity?: TransactionHistoryItem[];
+
+export interface WalletTracker {
+  id: string;
+  userId: string;
+  walletAddress: string;
+  alias: string;
+  emoji: string;
+  chains: Chain[];
+  tags: string[];
+  createdAt: Date;
+  lastUpdated: Date;
+}
+
+export type Chain = 'ETH' | 'BASE' | 'ARBITRUM' | 'BSC' | 'SOL';
+
+export interface WalletEvent {
+  id: string;
+  trackerWalletId: string;
+  type: 'BUY' | 'SELL' | 'TRANSFER_IN' | 'TRANSFER_OUT' | 'LIQUIDITY_ADD' | 'LIQUIDITY_REMOVE' | 'SWAP';
+  tokenAddress: string;
+  tokenSymbol: string;
+  tokenName?: string;
+  amount: string;
+  usdValue: number;
+  txHash: string;
+  blockNumber: number;
+  timestamp: Date;
+  chain: Chain;
+  details?: {
+    from?: string;
+    to?: string;
+    gasUsed?: string;
+    gasPrice?: string;
+    pricePerUnit?: number;
+  };
+}
+
+export interface WalletFlow {
+  tokenAddress: string;
+  tokenSymbol: string;
+  inflow: number;
+  outflow: number;
+  netFlow: number;
+  usdValue: number;
+}
+
+export interface WalletAlert {
+  id: string;
+  trackerId: string;
+  type: 'LARGE_BUY' | 'LARGE_SELL' | 'INFLOW' | 'OUTFLOW' | 'NEW_PAIR' | 'RUG_PULL';
+  threshold?: number;
+  enabled: boolean;
+  createdAt: Date;
+}
+
+export interface AlertNotification {
+  id: string;
+  alertId: string;
+  eventId: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: Date;
+}
 }
 
 export enum Tab {

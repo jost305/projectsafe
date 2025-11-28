@@ -1,0 +1,16 @@
+/* Minimal global styles to avoid 404/MIME CSS errors during dev */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: #ffffff;
+  color: #0b1220;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Provide a visible fallback to help debugging blank screens */
+.app-debug-boundary {
+  outline: 1px dashed rgba(0,0,0,0.06);
+}

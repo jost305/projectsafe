@@ -18,7 +18,7 @@ export const TransactionSigner: React.FC<TransactionSignerProps> = ({ transactio
 
   return (
     <div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div class="bg-[#1C1C1E] w-full max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative animate-slide-up">
+      <div class="bg-[#1C1C1E] w-full max-w-sm rounded-t-2xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative animate-slide-up">
         
         {/* Header */}
         <div class="p-5 border-b border-white/5 flex justify-between items-center bg-[#141416]">

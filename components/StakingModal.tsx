@@ -15,7 +15,7 @@ export const StakingModal: React.FC<StakingModalProps> = ({ onClose, tokenSymbol
   if (step === 'list') {
     return (
       <div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center bg-black/80 backdrop-blur-sm animate-fade-in">
-        <div class="bg-[#1C1C1E] w-full max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative animate-slide-up h-[85vh] flex flex-col">
+        <div class="bg-[#1C1C1E] w-full max-w-sm rounded-t-2xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative animate-slide-up h-[80vh] flex flex-col">
            <div class="p-4 flex justify-between items-center border-b border-white/5 bg-[#1C1C1E]">
              <h2 class="font-bold text-lg">Stake {tokenSymbol}</h2>
              <button onClick={onClose} class="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
@@ -74,7 +74,7 @@ export const StakingModal: React.FC<StakingModalProps> = ({ onClose, tokenSymbol
 
   return (
     <div class="fixed inset-0 z-50 flex items-end justify-center sm:items-center bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div class="bg-[#1C1C1E] w-full max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative animate-slide-up">
+      <div class="bg-[#1C1C1E] w-full max-w-sm rounded-t-2xl sm:rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative animate-slide-up">
         <div class="p-4 flex justify-between items-center border-b border-white/5">
            <h2 class="font-bold text-lg">Stake {tokenSymbol}</h2>
            <button onClick={() => setStep('list')} class="text-sm text-gray-400 hover:text-white">Back</button>

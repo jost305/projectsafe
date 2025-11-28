@@ -29,7 +29,9 @@ import {
   Fuel,
   Calendar,
   Wallet2
+  ,X
 } from 'lucide-react';
+import Profile from './components/Profile';
 import { usePrivy, useWallets } from '@privy-io/react-auth';
 import { useAccount } from 'wagmi';
 import { INITIAL_TOKENS, INITIAL_NFTS, COLORS, MARKET_TOKENS, MOCK_HISTORY } from './constants';
@@ -59,6 +61,7 @@ import { GasOptimizer } from './components/GasOptimizer';
 import { WalletManager } from './components/WalletManager';
 import { TransactionScheduler } from './components/TransactionScheduler';
 import { NotificationCenter } from './components/NotificationCenter';
+import Swap from './components/Swap';
 
 // Define the Tab enum with updated names
 export enum Tab {
@@ -197,12 +200,12 @@ export default function App() {
     } as TransactionDetails);
   };
 
-  if (!hasOnboarded) {
+  if (!hasOnboarded && window.innerWidth < 768) {
     return <Onboarding onComplete={() => setHasOnboarded(true)} />;
   }
 
   return (
-    <div class="min-h-screen bg-[#0C0C0C] text-white font-sans flex flex-col overflow-hidden max-w-md md:max-w-full md:pl-20 lg:pl-64 mx-auto relative shadow-2xl">
+    <div class="min-h-screen bg-[#0C0C0C] text-white font-sans flex flex-col overflow-hidden mx-auto relative shadow-2xl">
       <ToastSystem toasts={toasts} removeToast={removeToast} />
 
       {/* Overlays */}
@@ -255,90 +258,91 @@ export default function App() {
       )}
 
       {showNotificationCenter && (
-        <div class="fixed inset-0 bg-black/80 z-50 flex flex-col">
-          <div class="flex-1 bg-[#0C0C0C] overflow-y-auto">
-            <div class="p-5">
-              <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold">Notifications</h2>
+        <div class="fixed inset-0 bg-black/80 z-50 flex items-end md:items-start md:justify-end md:p-4">
+          <div class="w-full md:w-96 bg-[#0C0C0C] rounded-t-2xl md:rounded-2xl overflow-y-auto max-h-96 md:max-h-screen border border-white/10">
+            <div class="p-4 sticky top-0 bg-[#0C0C0C] border-b border-white/5">
+              <div class="flex items-center justify-between">
+                <h2 class="text-lg font-bold">Notifications</h2>
                 <button 
                   onClick={() => setShowNotificationCenter(false)}
-                  class="text-gray-400 hover:text-white"
+                  class="text-gray-400 hover:text-white text-2xl leading-none"
                 >
-                  <ChevronDown size={24} />
+                  ×
                 </button>
               </div>
+            </div>
+            <div class="p-4">
               <NotificationCenter onClose={() => setShowNotificationCenter(false)} />
             </div>
           </div>
         </div>
       )}
 
-      {/* Header (Global) - Only show on non-Terminal tabs */}
-      {activeTab !== Tab.SWAP && (
-        <header class="px-5 md:px-8 pt-4 pb-2 flex justify-between items-center z-10 bg-[#0C0C0C] max-w-7xl mx-auto w-full">
-          <div class="flex items-center gap-3">
-            {!authenticated ? (
-              <button 
-                onClick={login}
-                disabled={!ready}
-                class="bg-[#AB9FF2] text-black px-4 py-2 rounded-xl font-semibold text-sm hover:bg-[#9B8FE2] transition-colors disabled:opacity-50"
-              >
-                Connect Wallet
-              </button>
-            ) : (
-              <div class="flex items-center gap-3 bg-[#1C1C1E] rounded-xl px-3 py-2">
-                {user?.wallet?.address && (
-                  <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-blue-500 flex items-center justify-center">
-                      <Wallet size={16} />
-                    </div>
-                    <div class="hidden md:flex flex-col">
-                      <span class="text-xs font-semibold">
-                        {user?.wallet?.address.slice(0, 6)}...{user?.wallet?.address.slice(-4)}
-                      </span>
-                      {user?.email?.address && (
-                        <span class="text-xs text-gray-400">{user.email.address}</span>
-                      )}
-                    </div>
-                    <button 
-                      onClick={logout}
-                      class="ml-2 text-gray-400 hover:text-white transition-colors"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+      {/* Header with Navigation Menu */}
+      <header class="sticky top-0 z-50 border-b border-white/5 bg-[#0C0C0C]/95 backdrop-blur-md">
+        <div class="px-4 md:px-6 py-3 flex items-center justify-between max-w-4xl mx-auto w-full">
+          {/* Logo */}
+          <div class="flex items-center gap-2 shrink-0">
+            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+              <Wallet size={18} />
+            </div>
+            <span class="hidden sm:block text-lg font-bold">Phantom</span>
           </div>
-          <div class="flex items-center gap-4">
-            <button class="text-gray-400 hover:text-white transition-colors active:scale-90">
-               <ScanLine size={24} />
+
+          {/* Desktop Navigation Menu */}
+          <nav class="hidden md:flex items-center gap-1">
+            {[
+              { tab: Tab.HOME, label: 'Home', icon: Wallet },
+              { tab: Tab.SWAP, label: 'Swap', icon: ArrowRightLeft },
+              { tab: Tab.LAUNCH, label: 'Launch', icon: Flame },
+              { tab: Tab.MONITOR, label: 'Track', icon: Radar },
+              { tab: Tab.EXPLORE, label: 'Terminal', icon: SquareTerminal },
+              { tab: Tab.SETTINGS, label: 'Settings', icon: Settings },
+            ].map(({ tab, label, icon: Icon }) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                class={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === tab
+                    ? 'text-[#AB9FF2] bg-[#AB9FF2]/10'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Right Actions */}
+          <div class="flex items-center gap-3 shrink-0">
+            <button class="hidden md:flex text-gray-400 hover:text-white transition-colors active:scale-90">
+              <ScanLine size={20} />
             </button>
             <button 
               onClick={() => setShowNotificationCenter(true)}
-              class="relative cursor-pointer group active:scale-90 transition-transform"
+              class="relative text-gray-400 hover:text-white transition-colors active:scale-90"
             >
-              <Bell size={24} class="text-gray-400 group-hover:text-white transition-colors" />
-              <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#0C0C0C]"></span>
+              <Bell size={20} />
+              <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
+            <Profile />
           </div>
-        </header>
-      )}
+        </div>
+      </header>
 
       {/* Main Content Area */}
-      <main class="flex-1 overflow-y-auto pb-24 md:pb-4 scrollbar-hide max-w-7xl mx-auto w-full">
+      <main class="flex-1 overflow-y-auto pb-24 md:pb-6 scrollbar-hide max-w-4xl mx-auto w-full pt-4 md:pt-6">
 
         {/* HOME TAB */}
         {activeTab === Tab.HOME && (
-          <div class="flex flex-col gap-6 p-5 md:p-8 animate-fade-in">
+          <div class="flex flex-col gap-4 px-4 md:px-6 py-2 animate-fade-in">
             {/* Balance Card */}
-            <div class="flex flex-col items-center mt-4">
+            <div class="flex flex-col items-center mt-2">
               <div 
                 class="flex items-center gap-2 cursor-pointer group"
                 onClick={() => setPrivacyMode(!privacyMode)}
               >
-                <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight select-none tabular-nums">
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight select-none tabular-nums">
                   {balanceDisplay}
                 </h1>
                 <span class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-500">
@@ -352,7 +356,7 @@ export default function App() {
             </div>
 
             {/* Action Grid */}
-            <div class="grid grid-cols-4 md:grid-cols-4 lg:flex lg:justify-center gap-4 mt-2 md:max-w-2xl md:mx-auto">
+            <div class="grid grid-cols-4 gap-2 mt-3 md:flex md:justify-center md:gap-3">
               {[
                 { label: 'Receive', icon: ArrowDown, color: 'bg-[#1C1C1E]', onClick: () => setShowReceiveModal(true) },
                 { label: 'Send', icon: ArrowUp, color: 'bg-[#1C1C1E]', onClick: initSendTransaction },
@@ -506,9 +510,11 @@ export default function App() {
           </div>
         )}
 
-        {/* SWAP TAB - Trade/Swap functionality */}
+        {/* SWAP TAB - DEX Swap Interface */}
         {activeTab === Tab.SWAP && (
-           <Terminal />
+           <Swap tokens={tokens} onSwap={(from, to, amount) => {
+             addToast('Swap Initiated', 'success', `${amount} ${from.symbol} → ${to.symbol}`);
+           }} />
         )}
 
         {/* LAUNCH TAB */}
@@ -528,7 +534,7 @@ export default function App() {
 
         {/* SETTINGS TAB */}
         {activeTab === Tab.SETTINGS && (
-          <div class="p-5 md:p-8 animate-fade-in md:max-w-4xl md:mx-auto">
+          <div class="p-5 md:p-6 animate-fade-in md:max-w-4xl md:mx-auto">
              {settingsView === 'main' && (
                <>
                  <h2 class="text-2xl font-bold mb-6">Settings</h2>
@@ -792,7 +798,7 @@ export default function App() {
             active={activeTab === Tab.MONITOR} 
             onClick={() => setActiveTab(Tab.MONITOR)} 
             icon={Radar}
-            label="Monitor"
+            label="Track"
          />
          <NavButton 
             active={activeTab === Tab.EXPLORE} 
@@ -808,56 +814,7 @@ export default function App() {
          />
       </nav>
 
-      {/* Desktop Sidebar Navigation */}
-      <nav class="hidden md:flex fixed left-0 top-0 bottom-0 w-20 lg:w-64 bg-[#0C0C0C] border-r border-white/5 flex-col py-6 z-40">
-        <div class="px-4 mb-8 lg:px-6">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
-              <Wallet size={24} />
-            </div>
-            <span class="hidden lg:block text-xl font-bold">Phantom Pro</span>
-          </div>
-        </div>
-        
-        <div class="flex-1 flex flex-col gap-2 px-3">
-          <DesktopNavButton 
-            active={activeTab === Tab.HOME} 
-            onClick={() => setActiveTab(Tab.HOME)} 
-            icon={Wallet}
-            label="Home"
-          />
-          <DesktopNavButton 
-            active={activeTab === Tab.SWAP} 
-            onClick={() => setActiveTab(Tab.SWAP)} 
-            icon={ArrowRightLeft}
-            label="Trade"
-          />
-          <DesktopNavButton 
-            active={activeTab === Tab.LAUNCH} 
-            onClick={() => setActiveTab(Tab.LAUNCH)} 
-            icon={Flame}
-            label="Launch"
-          />
-          <DesktopNavButton 
-            active={activeTab === Tab.MONITOR} 
-            onClick={() => setActiveTab(Tab.MONITOR)} 
-            icon={Radar}
-            label="Monitor"
-          />
-          <DesktopNavButton 
-            active={activeTab === Tab.EXPLORE} 
-            onClick={() => setActiveTab(Tab.EXPLORE)} 
-            icon={SquareTerminal}
-            label="Terminal"
-          />
-          <DesktopNavButton 
-            active={activeTab === Tab.SETTINGS} 
-            onClick={() => setActiveTab(Tab.SETTINGS)} 
-            icon={Settings} 
-            label="Settings"
-          />
-        </div>
-      </nav>
+
     </div>
   );
 }
@@ -869,17 +826,5 @@ const NavButton = ({ active, onClick, icon: Icon, label }: { active: boolean, on
   >
     <Icon size={24} strokeWidth={active ? 2.5 : 2} />
     <span class="text-[10px] font-medium">{label}</span>
-  </button>
-);
-
-const DesktopNavButton = ({ active, onClick, icon: Icon, label }: { active: boolean, onClick: () => void, icon: React.ComponentType<any>, label: string }) => (
-  <button 
-    onClick={onClick}
-    class={`p-3 lg:px-4 lg:py-3 rounded-xl transition-all duration-300 hover:scale-105 flex items-center gap-3 ${
-      active ? 'bg-[#AB9FF2]/10 text-[#AB9FF2]' : 'text-gray-400 hover:text-white hover:bg-white/5'
-    }`}
-  >
-    <Icon size={24} strokeWidth={active ? 2.5 : 2} />
-    <span class="hidden lg:block text-sm font-semibold">{label}</span>
   </button>
 );

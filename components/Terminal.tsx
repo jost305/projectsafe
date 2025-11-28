@@ -324,7 +324,7 @@ export const Terminal: React.FC = () => {
   return (
     <div className="flex flex-col h-full bg-[#0C0C0C] animate-fade-in">
       {/* Top Navigation Bar - Desktop */}
-      <div className="hidden md:flex items-center justify-between px-6 lg:px-8 py-3 border-b border-white/10 max-w-7xl mx-auto w-full">
+      <div className="hidden md:flex items-center justify-between px-6 lg:px-8 py-3 border-b border-white/10 max-w-5xl mx-auto w-full">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">

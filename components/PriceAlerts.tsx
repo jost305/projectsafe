@@ -132,7 +132,7 @@ export const PriceAlerts: React.FC<PriceAlertsProps> = ({ tokens }) => {
       {/* Create Modal */}
       {showCreateModal && (
         <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end animate-fade-in">
-          <div class="bg-[#0C0C0C] w-full max-w-md mx-auto rounded-t-3xl p-6 animate-slide-up border-t border-white/10">
+          <div class="bg-[#0C0C0C] w-full max-w-sm mx-auto rounded-t-2xl p-5 animate-slide-up border-t border-white/10">
             <div class="flex justify-between items-center mb-6">
               <h3 class="text-xl font-bold">Create Alert</h3>
               <button onClick={() => setShowCreateModal(false)} class="p-2 hover:bg-white/5 rounded-full">
